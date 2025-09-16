@@ -421,6 +421,11 @@ const GAME_JOINED_REGEX = /\[.+\]: Sound engine started/
 const GAME_LAUNCH_REGEX = /^\[.+\]: (?:MinecraftForge .+ Initialized|ModLauncher .+ starting: .+|Loading Minecraft .+ with Fabric Loader .+)$/
 const MIN_LINGER = 5000
 
+function updateProgressBar(percentage) {
+    const progressBarFull = document.querySelector('.progress-bar-full');
+    progressBarFull.style.clipPath = `inset(0% 0% ${100 - percentage}% 0%)`;
+}
+
 async function dlAsync(login = true) {
 
     // Login parameter is temporary for debug purposes. Allows testing the validation/downloads without
@@ -431,6 +436,9 @@ async function dlAsync(login = true) {
     setLaunchDetails(Lang.queryJS('landing.dlAsync.loadingServerInfo'))
 
     let distro
+
+    // Example: Update progress to 22%
+    updateProgressBar(22);
 
     try {
         distro = await DistroAPI.refreshDistributionOrFallback()

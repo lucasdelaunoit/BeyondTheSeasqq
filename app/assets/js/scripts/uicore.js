@@ -137,6 +137,19 @@ document.addEventListener('readystatechange', function () {
     if (document.readyState === 'interactive'){
         loggerUICore.info('UICore Initializing..')
 
+        // Bind settings button
+        /*document.getElementById('settingsMediaButton').onclick = async e => {
+
+        }*/
+
+        // Bind restore down button.
+        Array.from(document.getElementsByClassName('fSb')).map((val) => {
+            val.addEventListener('click', async e => {
+                await prepareSettings()
+                switchView(getCurrentView(), VIEWS.settings)
+            })
+        })
+
         // Bind close button.
         Array.from(document.getElementsByClassName('fCb')).map((val) => {
             val.addEventListener('click', e => {

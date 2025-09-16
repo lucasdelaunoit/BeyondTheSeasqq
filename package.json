@@ -1,9 +1,9 @@
 {
-  "name": "helioslauncher",
+  "name": "beyondtheseas",
   "version": "2.2.1",
-  "productName": "Helios Launcher",
-  "description": "Modded Minecraft Launcher",
-  "author": "Daniel Scalzi (https://github.com/dscalzi/)",
+  "productName": "Beyond The Seas",
+  "description": "A minecraft server about One Piece",
+  "author": "Lucas Delaunoit (Based on Helios Launcher by David Scalzi)",
   "license": "UNLICENSED",
   "homepage": "https://github.com/dscalzi/HeliosLauncher",
   "bugs": {

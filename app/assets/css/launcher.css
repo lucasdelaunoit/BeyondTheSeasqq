@@ -485,13 +485,8 @@ body, button {
 }
 
 /* Logo on login form. */
-#loginImageSeal {
-    border-radius: 50%;
-    border: 2px solid #cad7e1;
-    background: rgba(1, 2, 1, 0.5);
+#loginLogo {
     height: 125px;
-    width: 125px;
-    box-shadow: 0px 0px 10px 0px rgb(0, 0, 0);
     margin-bottom: 20px;
 }
 
@@ -537,6 +532,26 @@ body, button {
 .shake {
     animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
 }
+
+.progress-bar {
+    position: relative;
+    width: 100%;
+    height: auto;
+}
+
+.progress-bar-bg,
+.progress-bar-full {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+}
+
+.progress-bar-full {
+    clip-path: inset(0% 0% 100% 0%);
+}
+
 
 @keyframes shake {
     10%, 90% {
@@ -3816,7 +3831,8 @@ input:checked + .toggleSwitchSlider:before {
 
 /* Rotating image for the spinner. */
 #loadSpinnerImage {
-    width: 280px;
+    width: 35px;
+    margin-top: 15px;
     height: auto;
     z-index: 400;
 }
@@ -3833,5 +3849,5 @@ input:checked + .toggleSwitchSlider:before {
 
 /* Class which is applied when the spinner image is spinning. */
 .rotating {
-    animation: rotating 10s linear infinite;
+    animation: rotating 5s linear infinite;
 }
