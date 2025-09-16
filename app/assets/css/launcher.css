@@ -2458,8 +2458,9 @@ input:checked + .toggleSwitchSlider:before {
     position: relative;
     transition: top 2s ease;
     top: 0px;
-    height: 77%;
+    height: 20%;
     display: flex;
+    justify-content: center;
 }
 #landingContainer > #upper > #left {
     display: inline-flex;
@@ -2478,9 +2479,15 @@ input:checked + .toggleSwitchSlider:before {
     height: 100%;
 }
 
+#landingContainer > #middle {
+    height: 50%;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
 /* Lower content container. */
 #landingContainer > #lower {
-    height: 23%;
+    height: 30%;
     display: flex;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 }
@@ -2731,118 +2738,6 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 
-#newsArticleContentWrapper {
-    width: 80%;
-}
-
-.newsArticleSpacerTop {
-    height: 15px;
-}
-
-/* Div to add spacing at the end of a news article. */
-.newsArticleSpacerBot {
-    height: 30px;
-}
-
-/* News navigation container. */
-#newsNavigationContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-    -webkit-user-select: none;
-    position: absolute;
-    bottom: 15px;
-    right: 0px;
-}
-
-/* Navigation status span. */
-#newsNavigationStatus {
-    font-size: 12px;
-    margin: 0px 15px;
-}
-
-/* Left and right navigation button styles. */
-#newsNavigateLeft,
-#newsNavigateRight {
-    background: none;
-    border: none;
-    outline: none;
-    height: 20px;
-    cursor: pointer;
-}
-#newsNavigateLeft:hover #newsNavigationLeftSVG,
-#newsNavigateLeft:focus #newsNavigationLeftSVG,
-#newsNavigateRight:hover #newsNavigationRightSVG,
-#newsNavigateRight:focus #newsNavigationRightSVG {
-    -webkit-filter: drop-shadow(0px 0px 2px #fff);
-}
-#newsNavigateLeft:active #newsNavigationLeftSVG .arrowLine,
-#newsNavigateRight:active #newsNavigationRightSVG .arrowLine {
-    stroke: #c7c7c7;
-}
-#newsNavigateLeft:active #newsNavigationLeftSVG,
-#newsNavigateRight:active #newsNavigationRightSVG {
-    -webkit-filter: drop-shadow(0px 0px 2px #c7c7c7);
-}
-#newsNavigateLeft:disabled #newsNavigationLeftSVG .arrowLine,
-#newsNavigateRight:disabled #newsNavigationRightSVG .arrowLine {
-    stroke: rgba(255, 255, 255, 0.75);
-}
-#newsNavigationLeftSVG {
-    transform: rotate(-90deg);
-    width: 15px;
-}
-#newsNavigationRightSVG {
-    transform: rotate(90deg);
-    width: 15px;
-}
-
-/* News error (message) container. */
-#newsErrorContainer {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-}
-#newsErrorFailed {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-}
-
-/* News error content (message). */
-.newsErrorContent {
-    font-size: 20px;
-}
-#newsErrorLoading {
-    display: flex;
-    width: 168.92px;
-}
-#nELoadSpan {
-    white-space: pre;
-}
-/* News error retry button styles. */
-#newsErrorRetry {
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    background: none;
-    border: none;
-    outline: none;
-    transition: 0.25s ease;
-}
-#newsErrorRetry:focus,
-#newsErrorRetry:hover {
-    text-shadow: 0px 0px 20px white;
-}
-#newsErrorRetry:active {
-    color: #c7c7c7;
-    text-shadow: 0px 0px 20px #c7c7c7;
-}
-
 /*******************************************************************************
  *                                                                             *
  * Landing View (Top Styles)                                                   *
@@ -2852,6 +2747,10 @@ input:checked + .toggleSwitchSlider:before {
 /* * *
 * Landing View (Top Styles) | Left Content
 * * */
+
+#logo {
+    height: 200px;
+}
 
 /* Logo image. */
 #image_seal {
@@ -2964,51 +2863,24 @@ input:checked + .toggleSwitchSlider:before {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-sizing: border-box;
-    position: relative;
+    background-color: rgba(1, 2, 1, 0.5);
+    border-radius: 10px;
+    max-width: 250px;
+    padding: 10px 4px;
+    gap: 10px;
 }
 
 /* User profile avatar container. */
 #avatarContainer {
     border-radius: 50%;
     border: 2px solid #cad7e1;
-    box-sizing: border-box;
     background: rgba(1, 2, 1, 0.5);
     height: 70px;
     width: 70px;
-    box-shadow: 0px 0px 10px 0px rgb(0, 0, 0);
     overflow: hidden;
-    position: relative;
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
-}
-
-/* Avatar edit overlay. */
-#avatarOverlay {
-    opacity: 0;
-    position: absolute;
-    z-index: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: 0.25s ease;
-    font-weight: bold;
-    letter-spacing: 2px;
-    background-color: rgba(0, 0, 0, 0.35);
-    -webkit-user-select: none;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-}
-#avatarOverlay:hover,
-#avatarOverlay:focus {
-    opacity: 1;
-}
-#avatarOverlay:active {
-    background-color: rgba(0, 0, 0, 0.45);
 }
 
 /* User profile name text. */
@@ -3018,9 +2890,6 @@ input:checked + .toggleSwitchSlider:before {
     font-weight: 900;
     letter-spacing: 1px;
     text-shadow: 0px 0px 20px black;
-    position: absolute;
-    right: 95px;
-    text-align: right;
     -webkit-user-select: initial;
 }
 
