@@ -77,6 +77,7 @@ function setLaunchPercentage(percent){
     launch_progress.setAttribute('max', 100)
     launch_progress.setAttribute('value', percent)
     launch_progress_label.innerHTML = percent + '%'
+    setProgressBarForeground(percent)
 }
 
 /**
@@ -87,6 +88,7 @@ function setLaunchPercentage(percent){
 function setDownloadPercentage(percent){
     remote.getCurrentWindow().setProgressBar(percent/100)
     setLaunchPercentage(percent)
+    setProgressBarForeground(percent)
 }
 
 /**
@@ -217,10 +219,9 @@ const refreshServerStatus = async (fade = false) => {
 
     let pLabel = Lang.queryJS('landing.serverStatus.server')
     let pVal = Lang.queryJS('landing.serverStatus.offline')
-
     try {
 
-        const servStat = await getServerStatus(47, serv.hostname, serv.port)
+        const servStat = await getServerStatus(47, '91.197.6.68', 25716)
         console.log(servStat)
         pLabel = Lang.queryJS('landing.serverStatus.players')
         pVal = servStat.players.online + '/' + servStat.players.max
@@ -411,6 +412,18 @@ async function downloadJava(effectiveJavaOptions, launchAfter = true) {
 
 }
 
+/**
+ * Set the width of the foreground progress bar image according to percent (0-100).
+ *
+ * @param {number} percent Percentage (0-100)
+ */
+function setProgressBarForeground(percent) {
+    const progressBarFull = document.querySelector('.progress-bar-full')
+    // At 0%, foreground is fully clipped (hidden); at 100%, not clipped (fully visible)
+    // The clipPath inset is: top 0%, right 0%, bottom (100 - percent)%, left 0%
+    progressBarFull.style.clipPath = `inset(0% 0% ${100 - percent}% 0%)`
+}
+
 // Keep reference to Minecraft Process
 let proc
 // Is DiscordRPC enabled
@@ -420,11 +433,6 @@ let hasRPC = false
 const GAME_JOINED_REGEX = /\[.+\]: Sound engine started/
 const GAME_LAUNCH_REGEX = /^\[.+\]: (?:MinecraftForge .+ Initialized|ModLauncher .+ starting: .+|Loading Minecraft .+ with Fabric Loader .+)$/
 const MIN_LINGER = 5000
-
-function updateProgressBar(percentage) {
-    const progressBarFull = document.querySelector('.progress-bar-full');
-    progressBarFull.style.clipPath = `inset(0% 0% ${100 - percentage}% 0%)`;
-}
 
 async function dlAsync(login = true) {
 
@@ -437,8 +445,6 @@ async function dlAsync(login = true) {
 
     let distro
 
-    // Example: Update progress to 22%
-    updateProgressBar(22);
 
     try {
         distro = await DistroAPI.refreshDistributionOrFallback()
@@ -619,3 +625,24 @@ async function dlAsync(login = true) {
     }
 
 }
+
+/* ----------- [Patch notes] ----------- */
+// Fetch and render the patch note content
+async function fetchAndRenderPatchNotes() {
+    const patchNoteContent = document.getElementById('patchNoteContent')
+
+    try {
+        const response = await fetch('https://beyondtheseas.ovh/V2/config/patch.txt')
+        if (!response.ok) {
+            throw new Error(`Failed to fetch patch notes: ${response.statusText}`)
+        }
+
+        patchNoteContent.innerHTML = await response.text()
+    } catch (error) {
+        console.error('Error fetching patch notes :', error)
+        patchNoteContent.innerHTML = '<span style="color: red;">Failed to load patch notes.</span>'
+    }
+}
+
+// Call the function to fetch and render patch notes
+fetchAndRenderPatchNotes()
