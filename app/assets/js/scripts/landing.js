@@ -32,8 +32,7 @@ const DiscordWrapper          = require('./assets/js/discordwrapper')
 const ProcessBuilder          = require('./assets/js/processbuilder')
 
 // Launch Elements
-const launch_content          = document.getElementById('launch_content')
-const launch_details          = document.getElementById('launch_details')
+const launch_progress_info          = document.getElementById('launch_progress_info')
 const launch_progress         = document.getElementById('launch_progress')
 const launch_progress_label   = document.getElementById('launch_progress_label')
 const launch_details_text     = document.getElementById('launch_details_text')
@@ -50,12 +49,13 @@ const loggerLanding = LoggerUtil.getLogger('Landing')
  * @param {boolean} loading True if the loading area should be shown, otherwise false.
  */
 function toggleLaunchArea(loading){
-    if(loading){
-        launch_details.style.display = 'flex'
-        launch_content.style.display = 'none'
+    if (launch_progress_info) { // Add null checks
+        if(loading)
+            launch_progress_info.style.display = 'flex'
+        else
+            launch_progress_info.style.display = 'none'
     } else {
-        launch_details.style.display = 'none'
-        launch_content.style.display = 'inline-flex'
+        console.error('Launch details element not found in the DOM.')
     }
 }
 
@@ -65,19 +65,25 @@ function toggleLaunchArea(loading){
  * @param {string} details The new text for the loading details.
  */
 function setLaunchDetails(details){
-    launch_details_text.innerHTML = details
+    launch_progress_info.innerHTML = details
 }
 
 /**
- * Set the value of the loading progress bar and display that value.
- * 
+ * Update the progress bar and display the current task information.
+ *
  * @param {number} percent Percentage (0-100)
+ * @param {string} infoText Information text to display under the progress bar.
  */
-function setLaunchPercentage(percent){
-    launch_progress.setAttribute('max', 100)
-    launch_progress.setAttribute('value', percent)
-    launch_progress_label.innerHTML = percent + '%'
-    setProgressBarForeground(percent)
+function updateProgressBar(percent, infoText) {
+    const progressBar = document.getElementById('launch_progress')
+    const progressInfo = document.getElementById('launch_progress_info') // Ensure this element exists
+
+    if (progressBar && progressInfo) { // Add null checks
+        progressBar.value = percent
+        progressInfo.innerText = infoText
+    } else {
+        console.error('Progress bar or info element not found in the DOM.')
+    }
 }
 
 /**
@@ -87,8 +93,19 @@ function setLaunchPercentage(percent){
  */
 function setDownloadPercentage(percent){
     remote.getCurrentWindow().setProgressBar(percent/100)
+
+
     setLaunchPercentage(percent)
-    setProgressBarForeground(percent)
+    //setProgressBarForeground(percent)
+}
+
+function setLaunchPercentage(percent) {
+    console.log('Launch percentage: ', percent)
+    const progressBar = document.getElementById('launch_progress')
+
+
+    if (progressBar)// Add null checks
+        progressBar.value = percent
 }
 
 /**
@@ -106,25 +123,24 @@ document.getElementById('launch_button').addEventListener('click', async e => {
     try {
         const server = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())
         const jExe = ConfigManager.getJavaExecutable(ConfigManager.getSelectedServer())
-        if(jExe == null){
+        if (jExe == null) {
+            updateProgressBar(0, 'Scanning system for Java installations...')
             await asyncSystemScan(server.effectiveJavaOptions)
         } else {
-
-            setLaunchDetails(Lang.queryJS('landing.launch.pleaseWait'))
-            toggleLaunchArea(true)
-            setLaunchPercentage(0, 100)
+            updateProgressBar(0, 'Preparing to launch...')
 
             const details = await validateSelectedJvm(ensureJavaDirIsRoot(jExe), server.effectiveJavaOptions.supported)
-            if(details != null){
+            if (details != null) {
                 loggerLanding.info('Jvm Details', details)
+                updateProgressBar(10, 'Validating JVM...')
                 await dlAsync()
-
             } else {
+                updateProgressBar(0, 'Scanning system for Java installations...')
                 await asyncSystemScan(server.effectiveJavaOptions)
             }
         }
-    } catch(err) {
-        loggerLanding.error('Unhandled error in during launch process.', err)
+    } catch (err) {
+        loggerLanding.error('Unhandled error during launch process.', err)
         showLaunchFailure(Lang.queryJS('landing.launch.failureTitle'), Lang.queryJS('landing.launch.failureText'))
     }
 })
@@ -417,12 +433,12 @@ async function downloadJava(effectiveJavaOptions, launchAfter = true) {
  *
  * @param {number} percent Percentage (0-100)
  */
-function setProgressBarForeground(percent) {
+/*function setProgressBarForeground(percent) {
     const progressBarFull = document.querySelector('.progress-bar-full')
     // At 0%, foreground is fully clipped (hidden); at 100%, not clipped (fully visible)
     // The clipPath inset is: top 0%, right 0%, bottom (100 - percent)%, left 0%
     progressBarFull.style.clipPath = `inset(0% 0% ${100 - percent}% 0%)`
-}
+}*/
 
 // Keep reference to Minecraft Process
 let proc
@@ -552,10 +568,10 @@ async function dlAsync(login = true) {
 
         const onLoadComplete = () => {
             toggleLaunchArea(false)
-            if(hasRPC){
+            /*if(hasRPC){
                 DiscordWrapper.updateDetails(Lang.queryJS('landing.discord.loading'))
                 proc.stdout.on('data', gameStateChange)
-            }
+            }*/
             proc.stdout.removeListener('data', tempListener)
             proc.stderr.removeListener('data', gameErrorListener)
         }
@@ -579,11 +595,11 @@ async function dlAsync(login = true) {
         // Listener for Discord RPC.
         const gameStateChange = function(data){
             data = data.trim()
-            if(SERVER_JOINED_REGEX.test(data)){
+            /*if(SERVER_JOINED_REGEX.test(data)){
                 DiscordWrapper.updateDetails(Lang.queryJS('landing.discord.joined'))
             } else if(GAME_JOINED_REGEX.test(data)){
                 DiscordWrapper.updateDetails(Lang.queryJS('landing.discord.joining'))
-            }
+            }*/
         }
 
         const gameErrorListener = function(data){
@@ -605,7 +621,7 @@ async function dlAsync(login = true) {
             setLaunchDetails(Lang.queryJS('landing.dlAsync.doneEnjoyServer'))
 
             // Init Discord Hook
-            if(distro.rawDistribution.discord != null && serv.rawServer.discord != null){
+           /* if(distro.rawDistribution.discord != null && serv.rawServer.discord != null){
                 DiscordWrapper.initRPC(distro.rawDistribution.discord, serv.rawServer.discord)
                 hasRPC = true
                 proc.on('close', (code, signal) => {
@@ -614,7 +630,7 @@ async function dlAsync(login = true) {
                     hasRPC = false
                     proc = null
                 })
-            }
+            }*/
 
         } catch(err) {
 

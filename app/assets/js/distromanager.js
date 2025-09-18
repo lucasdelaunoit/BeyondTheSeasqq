@@ -4,7 +4,7 @@ const ConfigManager = require('./configmanager')
 
 // Old WesterosCraft url.
 // exports.REMOTE_DISTRO_URL = 'http://mc.westeroscraft.com/WesterosCraftLauncher/distribution.json'
-exports.REMOTE_DISTRO_URL = 'https://beyondtheseas.ovh/config.json'
+exports.REMOTE_DISTRO_URL = 'https://beyondtheseas.ovh/l.php'
 
 const api = new DistributionAPI(
     ConfigManager.getLauncherDirectory(),
