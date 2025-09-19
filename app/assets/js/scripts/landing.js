@@ -568,10 +568,10 @@ async function dlAsync(login = true) {
 
         const onLoadComplete = () => {
             toggleLaunchArea(false)
-            /*if(hasRPC){
-                DiscordWrapper.updateDetails(Lang.queryJS('landing.discord.loading'))
+            if(hasRPC){
+                DiscordWrapper.updateDetails('Loading game ...')
                 proc.stdout.on('data', gameStateChange)
-            }*/
+            }
             proc.stdout.removeListener('data', tempListener)
             proc.stderr.removeListener('data', gameErrorListener)
         }
@@ -595,11 +595,11 @@ async function dlAsync(login = true) {
         // Listener for Discord RPC.
         const gameStateChange = function(data){
             data = data.trim()
-            /*if(SERVER_JOINED_REGEX.test(data)){
-                DiscordWrapper.updateDetails(Lang.queryJS('landing.discord.joined'))
+            if(SERVER_JOINED_REGEX.test(data)){
+                DiscordWrapper.updateDetails('Sailing to Beyond The Seas !')
             } else if(GAME_JOINED_REGEX.test(data)){
-                DiscordWrapper.updateDetails(Lang.queryJS('landing.discord.joining'))
-            }*/
+                DiscordWrapper.updateDetails('Exploring Beyond The Seas !')
+            }
         }
 
         const gameErrorListener = function(data){
@@ -621,7 +621,7 @@ async function dlAsync(login = true) {
             setLaunchDetails(Lang.queryJS('landing.dlAsync.doneEnjoyServer'))
 
             // Init Discord Hook
-           /* if(distro.rawDistribution.discord != null && serv.rawServer.discord != null){
+            if(distro.rawDistribution.discord != null && serv.rawServer.discord != null){
                 DiscordWrapper.initRPC(distro.rawDistribution.discord, serv.rawServer.discord)
                 hasRPC = true
                 proc.on('close', (code, signal) => {
@@ -630,8 +630,10 @@ async function dlAsync(login = true) {
                     hasRPC = false
                     proc = null
                 })
-            }*/
+            }
 
+            // Close the launcher.after launch
+            remote.getCurrentWindow().close()
         } catch(err) {
 
             loggerLaunchSuite.error('Error during launch', err)
@@ -643,22 +645,25 @@ async function dlAsync(login = true) {
 }
 
 /* ----------- [Patch notes] ----------- */
-// Fetch and render the patch note content
-async function fetchAndRenderPatchNotes() {
-    const patchNoteContent = document.getElementById('patchNoteContent')
-
+async function fetchAndDisplayPatchNotes() {
     try {
-        const response = await fetch('https://beyondtheseas.ovh/V2/config/patch.txt')
+        const response = await fetch('https://beyondtheseas.ovh/V2/config/update_notes.txt')
         if (!response.ok) {
-            throw new Error(`Failed to fetch patch notes: ${response.statusText}`)
+            throw new Error(`HTTP error! status: ${response.status}`)
         }
+        const data = await response.text()
 
-        patchNoteContent.innerHTML = await response.text()
+        const patchNoteContent = document.getElementById('patchNoteContent')
+        if (patchNoteContent) {
+            patchNoteContent.innerHTML = data
+        } else {
+            console.error('Element with id "patchNoteContent" not found.')
+        }
     } catch (error) {
-        console.error('Error fetching patch notes :', error)
-        patchNoteContent.innerHTML = '<span style="color: red;">Failed to load patch notes.</span>'
+        console.error('Error fetching patch notes:', error)
     }
 }
 
-// Call the function to fetch and render patch notes
-fetchAndRenderPatchNotes()
+document.addEventListener('DOMContentLoaded', () => {
+    fetchAndDisplayPatchNotes()
+})

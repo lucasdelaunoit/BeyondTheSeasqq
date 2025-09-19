@@ -5,18 +5,9 @@ usernameEditButton = "Edit"
 settingsTooltip = "Settings"
 serverStatus = "SERVER"
 serverStatusPlaceholder = "OFFLINE"
-mojangStatus = "MOJANG STATUS"
-mojangStatusTooltipTitle = "Services"
-mojangStatusNETitle = "Non&nbsp;Essential"
-newsButton = "NEWS"
 launchButton = "PLAY"
 launchButtonPlaceholder = "&#8226; No Server Selected"
 launchDetails = "Please wait.."
-newsNavigationStatus = "{currentPage} of {totalPages}"
-newsErrorLoadSpan = "Checking for News.."
-newsErrorFailedSpan = "Failed to Load News"
-newsErrorRetryButton = "Try Again"
-newsErrorNoneSpan = "No News"
 
 [ejs.login]
 loginCancelText = "Cancel"
@@ -33,12 +24,6 @@ loginNeedAccountLink = "https://minecraft.net/store/minecraft-java-edition/"
 loginNeedAccountText = "Need an Account?"
 loginPasswordDisclaimer1 = "Your password is sent directly to mojang and never stored."
 loginPasswordDisclaimer2 = "{appName} is not affiliated with Mojang AB."
-
-[ejs.loginOptions]
-loginOptionsTitle = "Login Options"
-loginWithMicrosoft = "Login with Microsoft"
-loginWithMojang = "Login with Mojang"
-cancelButton = "Cancel"
 
 [ejs.overlay]
 serverSelectHeader = "Available Servers"
@@ -131,8 +116,8 @@ continueButton = "CONTINUE"
 
 
 [js.discord]
-waiting = "Waiting for Client.."
-state = "Server: {shortId}"
+waiting = "Waiting for client ..."
+state = "{shortId}"
 
 [js.index]
 microsoftLoginTitle = "Microsoft Login"
@@ -206,14 +191,6 @@ launchingGame = "Launching game.."
 launchWrapperNotDownloaded = "The main file, LaunchWrapper, failed to download properly. As a result, the game cannot launch.<br><br>To fix this issue, temporarily turn off your antivirus software and launch the game again.<br><br>If you have time, please <a href=\"https://github.com/dscalzi/HeliosLauncher/issues\">submit an issue</a> and let us know what antivirus software you use. We'll contact them and try to straighten things out."
 doneEnjoyServer = "Done. Enjoy the server!"
 checkConsoleForDetails = "Please check the console (CTRL + Shift + i) for more details."
-
-[js.landing.news]
-checking = "Checking for News"
-
-[js.landing.discord]
-loading = "Loading game.."
-joining = "Sailing to Westeros!"
-joined = "Exploring the Realm!"
 
 [js.overlay]
 dismiss = "Dismiss"
